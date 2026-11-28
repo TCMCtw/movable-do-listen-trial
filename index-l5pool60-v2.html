@@ -330,14 +330,15 @@ function markKeys() { document.querySelectorAll('#keys .btn').forEach(x => x.cla
 KEY_LABELS.forEach((label, i) => {
   const b = document.createElement('button');
   b.type = 'button'; b.className = 'btn ch' + (i === keyIdx ? ' sel' : ''); b.textContent = label; b.dataset.k = i;
-  b.onclick = () => { keyIdx = i; markKeys(); renderMel(); };
+  b.onclick = () => { keyIdx = i; markKeys(); itemKey = ITEMS[itemIdx].map(d => level >= 4 ? noteAt(keyIdx + d, VOICES[voice].oct) : keyNotes(keyIdx, VOICES[voice].oct)[d]); }; // 11-28 同上:換調不重置作答
   $('keys').appendChild(b);
 });
 function setVoice(v) {
   voice = v;
   $('vof').classList.toggle('sel', v === 'female');
   $('vom').classList.toggle('sel', v === 'male');
-  renderMel();
+  // 11-28 Ray:同一題換聲部只是換播放音色,不重置作答/計分 — 只重算音高,不呼叫 renderMel
+  itemKey = ITEMS[itemIdx].map(d => level >= 4 ? noteAt(keyIdx + d, VOICES[voice].oct) : keyNotes(keyIdx, VOICES[voice].oct)[d]);
 }
 $('vof').onclick = () => setVoice('female');
 $('vom').onclick = () => setVoice('male');
@@ -503,6 +504,7 @@ document.querySelectorAll('#idarea .choices .btn').forEach(b => { b.onclick = ()
 document.querySelectorAll('#choices4 .btn').forEach(b => { b.onclick = () => handlePick(b.dataset.off, b); });
 
 function closeItem(ok, hintIfBad, extraHtml) {
+  if (results.length > itemIdx) return; // 11-28 同題重複結算不計分(換聲部/換調重聽同題不算下一題)
   results.push(ok);
   renderDots();
   if (level === 5 && results.filter(r => !r).length === 2 && $('suggest').hidden) {

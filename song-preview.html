@@ -20,7 +20,7 @@
 </head>
 <body>
 <h1>世界名曲試聽清單(草稿,待審)</h1>
-<div class="cap">共 62 首,依歌名排列。選調與聲部後,每首可聽「旋律」(電子音,與題目相同)或「人聲答案」(切片人聲,與頁面答案相同)。速度一律 90 BPM。</div>
+<div class="cap">共 60 首,依歌名排列。選調與聲部後,每首可聽「旋律」(電子音,與題目相同)或「人聲答案」(切片人聲,與頁面答案相同)。速度一律 90 BPM。</div>
 <div class="cap">調:
   <span id="keys"></span>
   聲部:<button type="button" class="btn sel" id="vof">女聲</button><button type="button" class="btn" id="vom">男聲</button>
@@ -79,17 +79,15 @@ const SONG_FRAGS = [
   { id: 'when-the-saints', t: 'When the Saints Go Marching In 聖者行進', m: [0, 4, 5, 7, 7, 0, 4, 5, 7, 7], d: [1, 1, 1, 1, 3, 1, 1, 1, 1, 2] }, // B:Ray zip修改版
   { id: 'yankee-doodle', t: 'Yankee Doodle 洋基歌', m: [7, 12, 12, 14, 16, 12, 16, 14], d: [0.5, 1, 1, 1, 1, 1, 1, 2] }, // B:Ray zip回傳未改
   { id: 'zarathustra', t: 'Also sprach Zarathustra 查拉圖斯特拉如是說(2001 太空漫遊)', m: [0, 7, 12], d: [1.5, 1.5, 4] }, // B:Ray zip回傳未改
-  { id: 'new-beethoven-5th', t: 'beethoven-5th 貝多芬第五號交響曲(命運)', m: [4, 4, 4, 0, 2, 2, 2, -1], d: [0.5, 0.5, 0.5, 2, 0.5, 0.5, 0.5, 2] }, // D:Ray新曲(待補唱名)
-  { id: 'new-gkw-or-other-6-8', t: 'gkw-or-other-6-8 待確認(6/8)', m: [0, 0, 0, 2, 4, 4, 2, 4, 5, 7], d: [1.5, 1.5, 1, 0.5, 1.5, 1, 0.5, 1, 0.5, 3] }, // D:Ray新曲(待補唱名)
-  { id: 'new-moonlight-arpeggio', t: 'moonlight-arpeggio 月光奏鳴曲(貝多芬)', m: [0, 4, 7, 12, 16, 7, 12, 16], d: [0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25] }, // D:Ray新曲(待補唱名)
-  { id: 'new-my-heart-will-go-on', t: 'my-heart-will-go-on My Heart Will Go On(版權疑慮)', m: [16, 14, 12, 11, 9, 7, 9, 11], d: [2, 2, 2, 2, 2, 2, 2, 2] }, // D:Ray新曲(待補唱名)
-  { id: 'new-swan-lake', t: 'swan-lake 天鵝湖主題(柴可夫斯基)', m: [-3, -1, 0, 2, 4, 0, 4, 2, -1, 2], d: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1, 0.5, 0.5, 1] }, // D:Ray新曲(待補唱名)
-  { id: 'new-unidentified-A-min', t: 'unidentified-A-min 待確認(A小調)', m: [16, 11, 12, 14, 12, 11, 9, 9, 12, 16], d: [1, 0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5, 1] }, // D:Ray新曲(待補唱名)
-  { id: 'new-unidentified-Bb-min', t: 'unidentified-Bb-min 待確認(Bb小調)', m: [17, 16, 16, 17, 16, 16, 17, 16, 16], d: [0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5, 1] }, // D:Ray新曲(待補唱名)
-  { id: 'new-unidentified-C-min', t: 'unidentified-C-min 待確認(C小調)', m: [7, 4, 4, 5, 2, 2, 0, 2, 4, 5, 7, 7, 7], d: [1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2] }, // D:Ray新曲(待補唱名)
-  { id: 'new-unidentified-E-min-arp', t: 'unidentified-E-min-arp 待確認(E小調分解)', m: [-8, -3, 0, -8, -3, 0, -8, -3, 0], d: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5] }, // D:Ray新曲(待補唱名)
-  { id: 'new-unidentified-F-3-4', t: 'unidentified-F-3-4 待確認(F 3/4)', m: [-5, -3, -5, -3, 0, 2, 0, 2, 4, 2], d: [1.5, 0.5, 0.5, 0.5, 1.5, 0.5, 0.5, 0.5, 1, 1] }, // D:Ray新曲(待補唱名)
-  { id: 'new-what-a-wonderful-world', t: 'what-a-wonderful-world What a Wonderful World(版權疑慮)', m: [7, 12, 16, 12, 16, 14, 12, 9, 7], d: [1, 2, 0.5, 0.5, 2, 1, 2, 1, 3] }, // D:Ray新曲(待補唱名)
+  { id: 'new-beethoven-5th', t: 'Beethoven Symphony No. 5 (Fate) 貝多芬第五號交響曲(命運)', m: [4, 4, 4, 0, 2, 2, 2, -1], d: [0.5, 0.5, 0.5, 2, 0.5, 0.5, 0.5, 2] }, // D:Ray新曲(待補唱名)
+  { id: 'new-gkw-or-other-6-8', t: '待確認(6/8)', m: [0, 0, 0, 2, 4, 4, 2, 4, 5, 7], d: [1.5, 1.5, 1, 0.5, 1.5, 1, 0.5, 1, 0.5, 3] }, // D:Ray新曲(待補唱名)
+  { id: 'new-moonlight-arpeggio', t: 'Moonlight Sonata (Beethoven) 月光奏鳴曲(貝多芬)', m: [0, 4, 7, 12, 16, 7, 12, 16], d: [0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25] }, // D:Ray新曲(待補唱名)
+  { id: 'new-swan-lake', t: 'Swan Lake (Tchaikovsky) 天鵝湖主題(柴可夫斯基)', m: [-3, -1, 0, 2, 4, 0, 4, 2, -1, 2], d: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1, 0.5, 0.5, 1] }, // D:Ray新曲(待補唱名)
+  { id: 'new-unidentified-A-min', t: '待確認(A小調)', m: [16, 11, 12, 14, 12, 11, 9, 9, 12, 16], d: [1, 0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5, 1] }, // D:Ray新曲(待補唱名)
+  { id: 'new-unidentified-Bb-min', t: '待確認(Bb小調)', m: [17, 16, 16, 17, 16, 16, 17, 16, 16], d: [0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5, 1] }, // D:Ray新曲(待補唱名)
+  { id: 'new-unidentified-C-min', t: '待確認(C小調)', m: [7, 4, 4, 5, 2, 2, 0, 2, 4, 5, 7, 7, 7], d: [1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2] }, // D:Ray新曲(待補唱名)
+  { id: 'new-unidentified-E-min-arp', t: '待確認(E小調分解)', m: [-8, -3, 0, -8, -3, 0, -8, -3, 0], d: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5] }, // D:Ray新曲(待補唱名)
+  { id: 'new-unidentified-F-3-4', t: '待確認(F 3/4)', m: [-5, -3, -5, -3, 0, 2, 0, 2, 4, 2], d: [1.5, 0.5, 0.5, 0.5, 1.5, 0.5, 0.5, 0.5, 1, 1] }, // D:Ray新曲(待補唱名)
   { id: 'amazing-grace', t: 'Amazing Grace 奇異恩典', m: [7, 12, 16, 12, 16], d: [1, 1, 1, 1, 3] }, // E:建議保留版(未回檔) // everyinstrument 音高相符;節奏草案
   { id: 'au-clair-de-la-lune', t: 'Au Clair de la Lune 在月光下(法國民謠)', m: [0, 0, 0, 2, 4, 2, 0, 4, 2, 2, 0], d: [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
   { id: 'deck-the-halls', t: 'Deck the Halls 裝飾聖誕廳', m: [7, 5, 4, 2, 0, 2, 4, 0], d: [1, 0.5, 0.5, 1, 0.5, 0.5, 1, 1] }, // E:建議保留版(未回檔) // everyinstrument(F 調轉 do)

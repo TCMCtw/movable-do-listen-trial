@@ -82,12 +82,12 @@ const SONG_FRAGS = [
   { id: 'row-row-row-your-boat', t: 'Row Row Row Your Boat 划船', m: [0, 0, 0, 2, 4, 4, 2, 4, 5, 7], d: [1, 1, 0.75, 0.25, 1, 0.75, 0.25, 0.75, 0.25, 2], b: 90 }, // B:Ray zip修改版
   { id: 'wangchunfeng', t: 'Bang Chun Hong 望春風', m: [-5, -5, -3, 0, 2, 0, 2, 4], d: [1.5, 0.5, 1, 1, 1, 0.5, 0.5, 2], b: 90 }, // B:Ray zip回傳未改
   { id: 'we-wish-you', t: 'We Wish You a Merry Christmas 祝你聖誕快樂', m: [7, 12, 12, 14, 12, 11, 9, 9], d: [1, 1, 0.75, 0.25, 0.75, 0.25, 1, 1], b: 90 }, // B:Ray zip修改版
-  { id: 'when-the-saints', t: 'When the Saints Go Marching In 聖者行進', m: [0, 4, 5, 7, 0, 4, 5, 7], d: [1, 1, 1, 4, 1, 1, 1, 3], b: 90 }, // B:Ray zip修改版
+  { id: 'when-the-saints', t: 'When the Saints Go Marching In 聖者行進', m: [0, 4, 5, 7, 0, 4, 5, 7], d: [1, 1, 1, 4, 1, 1, 1, 3], g: { 3: 1 }, b: 90 }, // B:Ray zip修改版
   { id: 'yankee-doodle', t: 'Yankee Doodle 洋基歌', m: [7, 12, 12, 14, 16, 12, 16, 14], d: [0.5, 1, 1, 1, 1, 1, 1, 2], b: 90 }, // B:Ray zip回傳未改
   { id: 'zarathustra', t: 'Also sprach Zarathustra 查拉圖斯特拉如是說(2001 太空漫遊)', m: [0, 7, 12], d: [1.5, 1.5, 4], b: 90 }, // B:Ray zip回傳未改
   { id: 'arirang', t: 'Arirang 阿里郎(韓國民謠)', m: [-5, -3, -5, -3, 0, 2, 0, 2, 4, 2], d: [1.5, 0.5, 0.5, 0.5, 1.5, 0.5, 0.5, 0.5, 1, 1], b: 100 }, // D:Ray單檔33號 // 他的33號,以此版本為準
   { id: 'new-bach-prelude', t: 'Bach Prelude in C WTC I C大調前奏曲 BWV 846(巴赫)', m: [0, 4, 7, 12, 16, 7, 12, 16], d: [0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25], b: 30 }, // D:Ray新曲(待補唱名) // 他的42號
-  { id: 'new-beethoven-5th', t: 'Beethoven Symphony No. 5 命運交響曲(貝多芬)', m: [4, 4, 4, 0, 2, 2, 2, -1], d: [0.5, 0.5, 0.5, 2, 0.5, 0.5, 0.5, 2], b: 108 }, // D:Ray新曲(待補唱名) // 他的3號
+  { id: 'new-beethoven-5th', t: 'Beethoven Symphony No. 5 命運交響曲(貝多芬)', m: [4, 4, 4, 0, 2, 2, 2, -1], d: [0.5, 0.5, 0.5, 2, 0.5, 0.5, 0.5, 2], g: { 3: 0.5 }, b: 108 }, // D:Ray新曲(待補唱名) // 他的3號
   { id: 'new-canon-in-d', t: 'Canon in D 卡農(帕海貝爾)', m: [16, 14, 12, 11, 9, 7, 9, 11], d: [2, 2, 2, 2, 2, 2, 2, 2], b: 60 }, // D:Ray新曲 // 他的7號;原誤判為 My Heart Will Go On,實為卡農
   { id: 'new-gran-vals', t: 'Gran Vals Gran Vals(經典手機鈴聲,塔雷加)', m: [19, 17, 9, 11, 16, 14, 5, 7, 14, 12, 4, 7], d: [0.5, 0.5, 1, 1, 0.5, 0.5, 1, 1, 0.5, 0.5, 1, 1], b: 108 }, // D:Ray新曲 // 他的35號
   { id: 'new-moonlight', t: 'Moonlight Sonata 1st mov. 月光奏鳴曲第一樂章(貝多芬)', m: [4, -3, 0, 4, -3, 0, 4, -3, 0], d: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5], b: 90 }, // D:Ray新曲(待補唱名) // 他的8號;11-28 Ray:最低音移高八度(低mi→mi),同唱名不同八度算對
@@ -155,7 +155,7 @@ function playMelody(f) {
     const nn = noteAt(keyIdx + off, VOICES[voice].oct);
     const dur = Math.max(f.d[i] * beatOf(f), 0.12);
     tone(FREQ[nn], cur, Math.max(dur - 0.04, 0.1), 0.55);
-    cur += dur;
+    cur += dur + ((f.g && f.g[i]) || 0) * beatOf(f);
   });
 }
 async function playAnswer(f, btn) {
@@ -185,7 +185,7 @@ async function playAnswer(f, btn) {
       src.connect(gn); gn.connect(c.destination);
       src.start(t, start, len + 0.001);
       sungSources.push(src);
-      t += dur;
+      t += dur + ((f.g && f.g[i]) || 0) * beatOf(f);
     });
   } catch (e) { btn.textContent = '播放失敗'; }
   finally { btn.disabled = false; if (btn.textContent === '載入中…') btn.textContent = '人聲答案'; }

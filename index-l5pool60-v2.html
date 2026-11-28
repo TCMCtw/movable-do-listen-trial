@@ -194,7 +194,7 @@ const LEVELS = {
 // 名曲片段(m=相對 do 半音位移;d=拍長,四分=1)
 // 2026-11-28 v2,60 段,全部以 Ray 回檔 world_melodies-1.mscz(他的編號1-42)與修改版 zip 為基準真相:
 // 單檔唱名版 11 + 單檔無唱名對回編號 6(取代建議保留版)+ zip 修改版 18 + zip 未改 3 + 建議保留 13 + Ray 新曲 8 + arirang(他的33號)。
-// 每首一條,id 供 per-user 不重複(localStorage mdl-l5-heard)。new-moonlight 最低音 -8 超階梯,待 Ray 定;他的34號曲名空白待確認。
+// 每首一條,id 供 per-user 不重複(localStorage mdl-l5-heard)。new-moonlight 最低音 11-28 Ray 定:移高八度;他的34號曲名空白待確認。
 const SONG_FRAGS = [
   { id: 'amazing-grace', t: 'Amazing Grace 奇異恩典', m: [7, 12, 16, 12, 16, 14, 12, 9, 7], d: [1, 2, 0.5, 0.5, 2, 1, 2, 1, 3] }, // A:Ray單檔版(取代建議保留版) // 他的21號
   { id: 'brahms-lullaby', t: 'Brahms Lullaby 布拉姆斯搖籃曲', m: [4, 4, 7, 4, 4, 7], d: [0.5, 0.5, 2, 0.5, 0.5, 2] }, // A:Ray單檔唱名版
@@ -239,7 +239,7 @@ const SONG_FRAGS = [
   { id: 'new-beethoven-5th', t: 'Beethoven Symphony No. 5 命運交響曲(貝多芬)', m: [4, 4, 4, 0, 2, 2, 2, -1], d: [0.5, 0.5, 0.5, 2, 0.5, 0.5, 0.5, 2] }, // D:Ray新曲(待補唱名) // 他的3號
   { id: 'new-canon-in-d', t: 'Canon in D 卡農(帕海貝爾)', m: [16, 14, 12, 11, 9, 7, 9, 11], d: [2, 2, 2, 2, 2, 2, 2, 2] }, // D:Ray新曲 // 他的7號;原誤判為 My Heart Will Go On,實為卡農
   { id: 'new-gran-vals', t: 'Gran Vals Gran Vals(經典手機鈴聲,塔雷加)', m: [19, 17, 9, 11, 16, 14, 5, 7, 14, 12, 4, 7], d: [0.5, 0.5, 1, 1, 0.5, 0.5, 1, 1, 0.5, 0.5, 1, 1] }, // D:Ray新曲 // 他的35號
-  { id: 'new-moonlight', t: 'Moonlight Sonata 1st mov. 月光奏鳴曲第一樂章(貝多芬)', m: [-8, -3, 0, -8, -3, 0, -8, -3, 0], d: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5] }, // D:Ray新曲(待補唱名) // 他的8號;最低音 -8 超階梯下限,待定
+  { id: 'new-moonlight', t: 'Moonlight Sonata 1st mov. 月光奏鳴曲第一樂章(貝多芬)', m: [4, -3, 0, 4, -3, 0, 4, -3, 0], d: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5] }, // D:Ray新曲(待補唱名) // 他的8號;11-28 Ray:最低音移高八度(低mi→mi),同唱名不同八度算對
   { id: 'new-mozart-40', t: 'Mozart Symphony No. 40 第40號交響曲(莫札特)', m: [17, 16, 16, 17, 16, 16, 17, 16, 16], d: [0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5, 1] }, // D:Ray新曲(待補唱名) // 他的9號
   { id: 'new-old-macdonald', t: 'Old MacDonald Had a Farm 王老先生有塊地', m: [12, 12, 12, 7, 9, 9, 7, 16, 16, 14, 14, 12], d: [1.5, 0.5, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1] }, // D:Ray新曲 // 他的30號
   { id: 'new-unnamed-34', t: '美國民謠(曲名待確認)', m: [-1, -3, -5, -1, -3, -5, 7, 4, 7], d: [2, 0.5, 0.5, 0.5, 0.5, 1, 1, 0.5, 1] }, // D:Ray新曲 // 他的34號,他檔內標題空白

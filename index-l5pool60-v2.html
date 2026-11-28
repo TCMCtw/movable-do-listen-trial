@@ -194,71 +194,72 @@ const LEVELS = {
 // 名曲片段(m=相對 do 半音位移;d=拍長,四分=1)
 // 2026-11-28 v2,60 段,全部以 Ray 回檔 world_melodies-1.mscz(他的編號1-42)與修改版 zip 為基準真相:
 // 單檔唱名版 11 + 單檔無唱名對回編號 6(取代建議保留版)+ zip 修改版 18 + zip 未改 3 + 建議保留 13 + Ray 新曲 8 + arirang(他的33號)。
-// 每首一條,id 供 per-user 不重複(localStorage mdl-l5-heard)。new-moonlight 最低音 11-28 Ray 定:移高八度;他的34號曲名空白待確認。
+// 每首一條,id 供 per-user 不重複(localStorage mdl-l5-heard)。new-moonlight 最低音 11-28 Ray 定:移高八度;他的34號 11-28 確認=Swanee River。
 const SONG_FRAGS = [
-  { id: 'amazing-grace', t: 'Amazing Grace 奇異恩典', m: [7, 12, 16, 12, 16, 14, 12, 9, 7], d: [1, 2, 0.5, 0.5, 2, 1, 2, 1, 3] }, // A:Ray單檔版(取代建議保留版) // 他的21號
-  { id: 'brahms-lullaby', t: 'Brahms Lullaby 布拉姆斯搖籃曲', m: [4, 4, 7, 4, 4, 7], d: [0.5, 0.5, 2, 0.5, 0.5, 2] }, // A:Ray單檔唱名版
-  { id: 'frere-jacques', t: 'Frère Jacques 兩隻老虎', m: [0, 2, 4, 0, 0, 2, 4, 0], d: [1, 1, 1, 1, 1, 1, 1, 1] }, // A:Ray單檔唱名版
-  { id: 'greensleeves', t: 'Greensleeves 綠袖子', m: [9, 12, 14, 16, 17, 16, 14, 11, 7], d: [0.5, 1, 0.5, 1, 0.25, 0.25, 1, 0.5, 1] }, // A:Ray單檔唱名版
-  { id: 'happy-birthday', t: 'Happy Birthday 生日快樂歌', m: [7, 7, 9, 7, 12, 11], d: [0.75, 0.25, 1, 1, 1, 3] }, // A:Ray單檔唱名版
-  { id: 'jingle-bells', t: 'Jingle Bells 鈴兒響叮噹', m: [4, 4, 4, 4, 4, 4, 4, 7, 0, 2, 4], d: [1, 1, 2, 1, 1, 2, 1, 1, 1.5, 0.5, 1] }, // A:Ray單檔唱名版
-  { id: 'korobeiniki', t: 'Korobeiniki 貨郎(俄羅斯,Tetris 主題)', m: [16, 11, 12, 14, 12, 11, 9, 9, 12, 16], d: [1, 0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5, 1] }, // A:Ray單檔版(取代建議保留版) // 他的36號
-  { id: 'lightly-row', t: 'Lightly Row 輕輕划', m: [7, 4, 4, 5, 2, 2, 0, 2, 4, 5, 7, 7, 7], d: [1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2] }, // A:Ray單檔版(取代建議保留版) // 他的37號
-  { id: 'london-bridge', t: 'London Bridge 倫敦鐵橋垮下來', m: [7, 9, 7, 5, 4, 5, 7, 2, 4, 5], d: [1.5, 0.5, 1, 1, 1, 1, 2, 1, 1, 2] }, // A:Ray單檔唱名版
-  { id: 'mary-had-a-little-lamb', t: 'Mary Had a Little Lamb 瑪莉有隻小綿羊', m: [4, 2, 0, 2, 4, 4, 4, 2, 2, 2], d: [1, 1, 1, 1, 1, 1, 2, 1, 1, 2] }, // A:Ray單檔版(取代建議保留版) // 他的20號
-  { id: 'minuet-in-g', t: 'Minuet in G G 大調小步舞曲(巴哈)', m: [19, 12, 14, 16, 17, 19, 12, 12], d: [1, 0.5, 0.5, 0.5, 0.5, 1, 1, 1] }, // A:Ray單檔唱名版
-  { id: 'mountain-king', t: 'In the Hall of the Mountain King 山魔王的宮殿(葛利格)', m: [-3, -1, 0, 2, 4, 0, 4, 2, -1, 2], d: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1, 0.5, 0.5, 1] }, // A:Ray單檔版(取代建議保留版) // 他的14號
-  { id: 'ode-to-joy', t: 'Ode to Joy 快樂頌(貝多芬)', m: [4, 4, 5, 7, 7, 5, 4, 2, 0, 0, 2, 4], d: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1] }, // A:Ray單檔唱名版
-  { id: 'sakura', t: 'Sakura 櫻花(日本民謠)', m: [9, 9, 11, 9, 9, 11, 9, 11, 12, 11, 9, 11, 9, 5], d: [1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 0.5, 0.5, 1] }, // A:Ray單檔唱名版
-  { id: 'silent-night', t: 'Silent Night 平安夜', m: [7, 9, 7, 4, 7, 9, 7, 4], d: [1.5, 0.5, 1, 3, 1.5, 0.5, 1, 3] }, // A:Ray單檔唱名版
-  { id: 'this-old-man', t: 'This Old Man 這位老先生', m: [7, 4, 7, 7, 4, 7, 9, 7, 5, 4, 2, 4, 5], d: [1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2] }, // A:Ray單檔版(取代建議保留版) // 他的39號
-  { id: 'twinkle-twinkle', t: 'Twinkle Twinkle Little Star 小星星', m: [0, 0, 7, 7, 9, 9, 7], d: [1, 1, 1, 1, 1, 1, 2] }, // A:Ray單檔唱名版
-  { id: 'auld-lang-syne', t: 'Auld Lang Syne 友誼地久天長', m: [-5, 0, 0, 0, 4, 2, 0, 2], d: [1, 1.5, 0.5, 1, 1, 1.5, 0.5, 1] }, // B:Ray zip修改版
-  { id: 'aura-lee', t: 'Aura Lee 奧拉·李', m: [-5, 0, -1, 0, 2, -3, 2], d: [1, 1, 0.5, 1.5, 1.5, 0.5, 2] }, // B:Ray zip修改版
-  { id: 'blue-danube', t: 'The Blue Danube 藍色多瑙河', m: [0, 0, 4, 7, 7, 7, 7, 4, 4], d: [1, 1, 1, 1, 2, 1, 2, 1, 2] }, // B:Ray zip修改版
-  { id: 'bridal-chorus', t: 'Bridal Chorus (Wagner) 結婚進行曲(華格納)', m: [7, 12, 12, 12, 12, 7, 14, 11, 12], d: [1, 1.5, 0.5, 1, 1, 1, 1.5, 0.5, 1] }, // B:Ray zip修改版
-  { id: 'danny-boy', t: 'Danny Boy (Londonderry Air) 丹尼男孩', m: [-1, 0, 2, 4, 4, 2, 4, 9, 7, 4, 2, 0, -3], d: [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1] }, // B:Ray zip修改版
-  { id: 'eine-kleine', t: 'Eine kleine Nachtmusik 弦樂小夜曲(莫札特)', m: [12, 7, 12, 7, 12, 7, 12, 16, 19], d: [0.75, 0.25, 0.75, 0.25, 0.25, 0.25, 0.25, 0.25, 1] }, // B:Ray zip修改版
-  { id: 'good-king-wenceslas', t: 'Good King Wenceslas 溫塞斯拉斯國王', m: [12, 12, 12, 14, 12, 12, 7], d: [1, 1, 1, 1, 1, 1, 2] }, // B:Ray zip修改版
-  { id: 'hark-the-herald', t: 'Hark! The Herald Angels Sing 聽啊天使唱高聲', m: [0, 5, 5, 4, 5, 9, 9, 5], d: [1, 1, 1.5, 0.5, 1, 1, 1, 1] }, // B:Ray zip修改版
-  { id: 'joy-to-the-world', t: 'Joy to the World 普世歡騰', m: [12, 11, 9, 7, 5, 4, 2, 0], d: [1, 0.75, 0.5, 1.5, 0.25, 1, 1, 1.5] }, // B:Ray zip修改版
-  { id: 'loch-lomond', t: 'Loch Lomond 洛蒙德湖', m: [-5, 0, 0, 2, 4, 2, 0, 2, 2, 0, -3], d: [1, 1, 0.75, 0.25, 1, 0.75, 0.25, 1, 0.75, 0.25, 1] }, // B:Ray zip修改版
-  { id: 'mo-li-hua', t: 'Mo Li Hua (Jasmine Flower) 茉莉花', m: [4, 4, 7, 9, 12, 12, 9, 7, 7, 9, 7], d: [1, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1, 0.5, 0.5, 2] }, // B:Ray zip修改版
-  { id: 'o-christmas-tree', t: 'O Christmas Tree 聖誕樹', m: [7, 12, 12, 12, 12, 14, 16, 16, 16], d: [1, 1, 1, 1, 2, 1, 1, 1, 1] }, // B:Ray zip修改版
-  { id: 'o-come-all-ye-faithful', t: 'O Come All Ye Faithful 齊來虔誠崇拜', m: [12, 12, 7, 12, 14, 7], d: [1, 2, 1, 1, 2, 2] }, // B:Ray zip修改版
-  { id: 'o-sole-mio', t: 'O Sole Mio 我的太陽', m: [12, 12, 11, 7, 7, 7], d: [1, 1.5, 0.5, 1, 1, 2] }, // B:Ray zip修改版
-  { id: 'oh-susanna', t: 'Oh! Susanna 噢蘇珊娜', m: [0, 2, 4, 7, 7, 7, 9, 7, 4, 0], d: [0.5, 0.5, 1, 1, 1, 0.5, 0.5, 1, 1, 1.5] }, // B:Ray zip修改版
-  { id: 'row-row-row-your-boat', t: 'Row Row Row Your Boat 划船', m: [0, 0, 0, 2, 4, 4, 2, 4, 5, 7], d: [1, 1, 0.75, 0.25, 1, 0.75, 0.25, 0.75, 0.25, 2] }, // B:Ray zip修改版
-  { id: 'wangchunfeng', t: 'Bang Chun Hong 望春風', m: [-5, -5, -3, 0, 2, 0, 2, 4], d: [1.5, 0.5, 1, 1, 1, 0.5, 0.5, 2] }, // B:Ray zip回傳未改
-  { id: 'we-wish-you', t: 'We Wish You a Merry Christmas 祝你聖誕快樂', m: [7, 12, 12, 14, 12, 11, 9, 9], d: [1, 1, 0.75, 0.25, 0.75, 0.25, 1, 1] }, // B:Ray zip修改版
-  { id: 'when-the-saints', t: 'When the Saints Go Marching In 聖者行進', m: [0, 4, 5, 7, 7, 0, 4, 5, 7, 7], d: [1, 1, 1, 1, 3, 1, 1, 1, 1, 2] }, // B:Ray zip修改版
-  { id: 'yankee-doodle', t: 'Yankee Doodle 洋基歌', m: [7, 12, 12, 14, 16, 12, 16, 14], d: [0.5, 1, 1, 1, 1, 1, 1, 2] }, // B:Ray zip回傳未改
-  { id: 'zarathustra', t: 'Also sprach Zarathustra 查拉圖斯特拉如是說(2001 太空漫遊)', m: [0, 7, 12], d: [1.5, 1.5, 4] }, // B:Ray zip回傳未改
-  { id: 'arirang', t: 'Arirang 阿里郎(韓國民謠)', m: [-5, -3, -5, -3, 0, 2, 0, 2, 4, 2], d: [1.5, 0.5, 0.5, 0.5, 1.5, 0.5, 0.5, 0.5, 1, 1] }, // D:Ray單檔33號 // 他的33號,以此版本為準
-  { id: 'new-bach-prelude', t: 'Bach Prelude in C WTC I C大調前奏曲 BWV 846(巴赫)', m: [0, 4, 7, 12, 16, 7, 12, 16], d: [0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25] }, // D:Ray新曲(待補唱名) // 他的42號
-  { id: 'new-beethoven-5th', t: 'Beethoven Symphony No. 5 命運交響曲(貝多芬)', m: [4, 4, 4, 0, 2, 2, 2, -1], d: [0.5, 0.5, 0.5, 2, 0.5, 0.5, 0.5, 2] }, // D:Ray新曲(待補唱名) // 他的3號
-  { id: 'new-canon-in-d', t: 'Canon in D 卡農(帕海貝爾)', m: [16, 14, 12, 11, 9, 7, 9, 11], d: [2, 2, 2, 2, 2, 2, 2, 2] }, // D:Ray新曲 // 他的7號;原誤判為 My Heart Will Go On,實為卡農
-  { id: 'new-gran-vals', t: 'Gran Vals Gran Vals(經典手機鈴聲,塔雷加)', m: [19, 17, 9, 11, 16, 14, 5, 7, 14, 12, 4, 7], d: [0.5, 0.5, 1, 1, 0.5, 0.5, 1, 1, 0.5, 0.5, 1, 1] }, // D:Ray新曲 // 他的35號
-  { id: 'new-moonlight', t: 'Moonlight Sonata 1st mov. 月光奏鳴曲第一樂章(貝多芬)', m: [4, -3, 0, 4, -3, 0, 4, -3, 0], d: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5] }, // D:Ray新曲(待補唱名) // 他的8號;11-28 Ray:最低音移高八度(低mi→mi),同唱名不同八度算對
-  { id: 'new-mozart-40', t: 'Mozart Symphony No. 40 第40號交響曲(莫札特)', m: [17, 16, 16, 17, 16, 16, 17, 16, 16], d: [0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5, 1] }, // D:Ray新曲(待補唱名) // 他的9號
-  { id: 'new-old-macdonald', t: 'Old MacDonald Had a Farm 王老先生有塊地', m: [12, 12, 12, 7, 9, 9, 7, 16, 16, 14, 14, 12], d: [1.5, 0.5, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1] }, // D:Ray新曲 // 他的30號
-  { id: 'new-unnamed-34', t: '美國民謠(曲名待確認)', m: [-1, -3, -5, -1, -3, -5, 7, 4, 7], d: [2, 0.5, 0.5, 0.5, 0.5, 1, 1, 0.5, 1] }, // D:Ray新曲 // 他的34號,他檔內標題空白
-  { id: 'au-clair-de-la-lune', t: 'Au Clair de la Lune 在月光下(法國民謠)', m: [0, 0, 0, 2, 4, 2, 0, 4, 2, 2, 0], d: [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
-  { id: 'deck-the-halls', t: 'Deck the Halls 裝飾聖誕廳', m: [7, 5, 4, 2, 0, 2, 4, 0], d: [1, 0.5, 0.5, 1, 0.5, 0.5, 1, 1] }, // E:建議保留版(未回檔) // everyinstrument(F 調轉 do)
-  { id: 'dixie', t: 'Dixie 迪克西', m: [0, 2, 4, 5, 7, 9, 7, 5], d: [1, 1, 1, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
-  { id: 'god-save-the-king', t: 'God Save the King 天佑國王', m: [0, 0, 2, 0, 11, 12], d: [1, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
-  { id: 'grand-old-duke', t: 'The Grand Old Duke of York 約克大公', m: [0, 2, 4, 7, 4, 2, 0], d: [1, 1, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
-  { id: 'la-donna-e-mobile', t: 'La donna è mobile 女人善變(威爾第)', m: [11, 12, 14, 16, 17, 16, 14, 12], d: [1, 0.5, 0.5, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
-  { id: 'la-marseillaise', t: 'La Marseillaise 馬賽曲', m: [7, 0, 0, 2, 4, 5, 4, 2], d: [0.5, 1, 1, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
-  { id: 'londons-burning', t: 'Londons Burning 倫敦大火', m: [7, 9, 11, 12], d: [1, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
-  { id: 'pop-goes-the-weasel', t: 'Pop! Goes the Weasel 砰!黃鼠狼跑了', m: [7, 12, 14, 12, 9, 7], d: [1, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
-  { id: 'red-river-valley', t: 'Red River Valley 紅河谷', m: [7, 12, 16, 16, 14, 12, 14, 12, 9, 12], d: [1, 1, 1, 1, 1, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // everyinstrument 音高相符
-  { id: 'taps', t: 'Taps 熄燈號', m: [7, 7, 12], d: [1, 1, 3] }, // E:建議保留版(未回檔) // 音高待 Ray 核;僅 3 音
-  { id: 'the-first-noel', t: 'The First Noel 第一個聖誕', m: [4, 2, 0, 2, 4, 5, 7], d: [1, 0.5, 0.5, 0.5, 0.5, 0.5, 2] }, // E:建議保留版(未回檔) // everyinstrument 音高相符
-  { id: 'three-blind-mice', t: 'Three Blind Mice 三隻盲老鼠', m: [4, 2, 0, 4, 2, 0], d: [1, 1, 2, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'amazing-grace', t: 'Amazing Grace 奇異恩典', m: [7, 12, 16, 12, 16, 14, 12, 9, 7], d: [1, 2, 0.5, 0.5, 2, 1, 2, 1, 3], b: 72 }, // A:Ray單檔版(取代建議保留版) // 他的21號
+  { id: 'brahms-lullaby', t: 'Brahms Lullaby 布拉姆斯搖籃曲', m: [4, 4, 7, 4, 4, 7], d: [0.5, 0.5, 2, 0.5, 0.5, 2], b: 66 }, // A:Ray單檔唱名版
+  { id: 'frere-jacques', t: 'Frère Jacques 兩隻老虎', m: [0, 2, 4, 0, 0, 2, 4, 0], d: [1, 1, 1, 1, 1, 1, 1, 1], b: 108 }, // A:Ray單檔唱名版
+  { id: 'greensleeves', t: 'Greensleeves 綠袖子', m: [9, 12, 14, 16, 17, 16, 14, 11, 7], d: [0.5, 1, 0.5, 1, 0.25, 0.25, 1, 0.5, 1], b: 60 }, // A:Ray單檔唱名版
+  { id: 'happy-birthday', t: 'Happy Birthday 生日快樂歌', m: [7, 7, 9, 7, 12, 11], d: [0.75, 0.25, 1, 1, 1, 3], b: 100 }, // A:Ray單檔唱名版
+  { id: 'jingle-bells', t: 'Jingle Bells 鈴兒響叮噹', m: [4, 4, 4, 4, 4, 4, 4, 7, 0, 2, 4], d: [1, 1, 2, 1, 1, 2, 1, 1, 1.5, 0.5, 1], b: 120 }, // A:Ray單檔唱名版
+  { id: 'korobeiniki', t: 'Korobeiniki 貨郎(俄羅斯,Tetris 主題)', m: [16, 11, 12, 14, 12, 11, 9, 9, 12, 16], d: [1, 0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5, 1], b: 132 }, // A:Ray單檔版(取代建議保留版) // 他的36號
+  { id: 'lightly-row', t: 'Lightly Row 輕輕划', m: [7, 4, 4, 5, 2, 2, 0, 2, 4, 5, 7, 7, 7], d: [1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2], b: 108 }, // A:Ray單檔版(取代建議保留版) // 他的37號
+  { id: 'london-bridge', t: 'London Bridge 倫敦鐵橋垮下來', m: [7, 9, 7, 5, 4, 5, 7, 2, 4, 5], d: [1.5, 0.5, 1, 1, 1, 1, 2, 1, 1, 2], b: 108 }, // A:Ray單檔唱名版
+  { id: 'mary-had-a-little-lamb', t: 'Mary Had a Little Lamb 瑪莉有隻小綿羊', m: [4, 2, 0, 2, 4, 4, 4, 2, 2, 2], d: [1, 1, 1, 1, 1, 1, 2, 1, 1, 2], b: 140 }, // A:Ray單檔版(取代建議保留版) // 他的20號
+  { id: 'minuet-in-g', t: 'Minuet in G G 大調小步舞曲(巴哈)', m: [19, 12, 14, 16, 17, 19, 12, 12], d: [1, 0.5, 0.5, 0.5, 0.5, 1, 1, 1], b: 116 }, // A:Ray單檔唱名版
+  { id: 'mountain-king', t: 'In the Hall of the Mountain King 山魔王的宮殿(葛利格)', m: [-3, -1, 0, 2, 4, 0, 4, 2, -1, 2], d: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1, 0.5, 0.5, 1], b: 100 }, // A:Ray單檔版(取代建議保留版) // 他的14號
+  { id: 'ode-to-joy', t: 'Ode to Joy 快樂頌(貝多芬)', m: [4, 4, 5, 7, 7, 5, 4, 2, 0, 0, 2, 4], d: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], b: 108 }, // A:Ray單檔唱名版
+  { id: 'sakura', t: 'Sakura 櫻花(日本民謠)', m: [9, 9, 11, 9, 9, 11, 9, 11, 12, 11, 9, 11, 9, 5], d: [1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 0.5, 0.5, 1], b: 72 }, // A:Ray單檔唱名版
+  { id: 'silent-night', t: 'Silent Night 平安夜', m: [7, 9, 7, 4, 7, 9, 7, 4], d: [1.5, 0.5, 1, 3, 1.5, 0.5, 1, 3], b: 120 }, // A:Ray單檔唱名版
+  { id: 'this-old-man', t: 'This Old Man 這位老先生', m: [7, 4, 7, 7, 4, 7, 9, 7, 5, 4, 2, 4, 5], d: [1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2], b: 108 }, // A:Ray單檔版(取代建議保留版) // 他的39號
+  { id: 'twinkle-twinkle', t: 'Twinkle Twinkle Little Star 小星星', m: [0, 0, 7, 7, 9, 9, 7], d: [1, 1, 1, 1, 1, 1, 2], b: 100 }, // A:Ray單檔唱名版
+  { id: 'auld-lang-syne', t: 'Auld Lang Syne 友誼地久天長', m: [-5, 0, 0, 0, 4, 2, 0, 2], d: [1, 1.5, 0.5, 1, 1, 1.5, 0.5, 1], b: 90 }, // B:Ray zip修改版
+  { id: 'aura-lee', t: 'Aura Lee 奧拉·李', m: [-5, 0, -1, 0, 2, -3, 2], d: [1, 1, 0.5, 1.5, 1.5, 0.5, 2], b: 90 }, // B:Ray zip修改版
+  { id: 'blue-danube', t: 'The Blue Danube 藍色多瑙河', m: [0, 0, 4, 7, 7, 7, 7, 4, 4], d: [1, 1, 1, 1, 2, 1, 2, 1, 2], b: 120 }, // B:Ray zip修改版
+  { id: 'bridal-chorus', t: 'Bridal Chorus (Wagner) 結婚進行曲(華格納)', m: [7, 12, 12, 12, 7, 14, 11, 12], d: [1, 0.75, 0.25, 2, 1, 0.75, 0.25, 2], b: 90 }, // B:Ray zip修改版
+  { id: 'danny-boy', t: 'Danny Boy (Londonderry Air) 丹尼男孩', m: [-1, 0, 2, 4, 4, 2, 4, 9, 7, 4, 2, 0, -3], d: [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1], b: 90 }, // B:Ray zip修改版
+  { id: 'eine-kleine', t: 'Eine kleine Nachtmusik 弦樂小夜曲(莫札特)', m: [12, 7, 12, 7, 12, 7, 12, 16, 19], d: [0.75, 0.25, 0.75, 0.25, 0.25, 0.25, 0.25, 0.25, 1], b: 50 }, // B:Ray zip修改版
+  { id: 'good-king-wenceslas', t: 'Good King Wenceslas 溫塞斯拉斯國王', m: [12, 12, 12, 14, 12, 12, 7], d: [1, 1, 1, 1, 1, 1, 2], b: 90 }, // B:Ray zip修改版
+  { id: 'hark-the-herald', t: 'Hark! The Herald Angels Sing 聽啊天使唱高聲', m: [0, 5, 5, 4, 5, 9, 9, 5], d: [1, 1, 1.5, 0.5, 1, 1, 1, 1], b: 90 }, // B:Ray zip修改版
+  { id: 'joy-to-the-world', t: 'Joy to the World 普世歡騰', m: [12, 11, 9, 7, 5, 4, 2, 0], d: [1, 0.75, 0.5, 1.5, 0.25, 1, 1, 1.5], b: 90 }, // B:Ray zip修改版
+  { id: 'loch-lomond', t: 'Loch Lomond 洛蒙德湖', m: [-5, 0, 0, 2, 4, 2, 0, 2, 2, 0, -3], d: [1, 1, 0.75, 0.25, 1, 0.75, 0.25, 1, 0.75, 0.25, 1], b: 90 }, // B:Ray zip修改版
+  { id: 'mo-li-hua', t: 'Mo Li Hua (Jasmine Flower) 茉莉花', m: [4, 4, 7, 9, 12, 12, 9, 7, 7, 9, 7], d: [1, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1, 0.5, 0.5, 2], b: 90 }, // B:Ray zip修改版
+  { id: 'o-christmas-tree', t: 'O Christmas Tree 聖誕樹', m: [7, 12, 12, 12, 12, 14, 16, 16, 16], d: [1, 1, 1, 1, 2, 1, 1, 1, 1], b: 140 }, // B:Ray zip修改版
+  { id: 'o-come-all-ye-faithful', t: 'O Come All Ye Faithful 齊來虔誠崇拜', m: [12, 12, 7, 12, 14, 7], d: [1, 2, 1, 1, 2, 2], b: 90 }, // B:Ray zip修改版
+  { id: 'o-sole-mio', t: 'O Sole Mio 我的太陽', m: [12, 12, 11, 7, 7, 7], d: [1, 1.5, 0.5, 1, 1, 2], b: 90 }, // B:Ray zip修改版
+  { id: 'oh-susanna', t: 'Oh! Susanna 噢蘇珊娜', m: [0, 2, 4, 7, 7, 7, 9, 7, 4, 0], d: [0.5, 0.5, 1, 1, 1, 0.5, 0.5, 1, 1, 1.5], b: 90 }, // B:Ray zip修改版
+  { id: 'row-row-row-your-boat', t: 'Row Row Row Your Boat 划船', m: [0, 0, 0, 2, 4, 4, 2, 4, 5, 7], d: [1, 1, 0.75, 0.25, 1, 0.75, 0.25, 0.75, 0.25, 2], b: 90 }, // B:Ray zip修改版
+  { id: 'wangchunfeng', t: 'Bang Chun Hong 望春風', m: [-5, -5, -3, 0, 2, 0, 2, 4], d: [1.5, 0.5, 1, 1, 1, 0.5, 0.5, 2], b: 90 }, // B:Ray zip回傳未改
+  { id: 'we-wish-you', t: 'We Wish You a Merry Christmas 祝你聖誕快樂', m: [7, 12, 12, 14, 12, 11, 9, 9], d: [1, 1, 0.75, 0.25, 0.75, 0.25, 1, 1], b: 90 }, // B:Ray zip修改版
+  { id: 'when-the-saints', t: 'When the Saints Go Marching In 聖者行進', m: [0, 4, 5, 7, 7, 0, 4, 5, 7, 7], d: [1, 1, 1, 1, 3, 1, 1, 1, 1, 2], b: 90 }, // B:Ray zip修改版
+  { id: 'yankee-doodle', t: 'Yankee Doodle 洋基歌', m: [7, 12, 12, 14, 16, 16, 12, 16, 14, 14], d: [0.5, 1, 1, 1, 0.5, 0.5, 1, 1, 1.5, 0.5], b: 90 }, // B:Ray zip回傳未改
+  { id: 'zarathustra', t: 'Also sprach Zarathustra 查拉圖斯特拉如是說(2001 太空漫遊)', m: [0, 7, 12, 12], d: [1.5, 1.5, 1, 3], b: 90 }, // B:Ray zip回傳未改
+  { id: 'arirang', t: 'Arirang 阿里郎(韓國民謠)', m: [-5, -3, -5, -3, 0, 2, 0, 2, 4, 2], d: [1.5, 0.5, 0.5, 0.5, 1.5, 0.5, 0.5, 0.5, 1, 1], b: 100 }, // D:Ray單檔33號 // 他的33號,以此版本為準
+  { id: 'new-bach-prelude', t: 'Bach Prelude in C WTC I C大調前奏曲 BWV 846(巴赫)', m: [0, 4, 7, 12, 16, 7, 12, 16], d: [0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25], b: 30 }, // D:Ray新曲(待補唱名) // 他的42號
+  { id: 'new-beethoven-5th', t: 'Beethoven Symphony No. 5 命運交響曲(貝多芬)', m: [4, 4, 4, 0, 2, 2, 2, -1], d: [0.5, 0.5, 0.5, 2, 0.5, 0.5, 0.5, 2], b: 108 }, // D:Ray新曲(待補唱名) // 他的3號
+  { id: 'new-canon-in-d', t: 'Canon in D 卡農(帕海貝爾)', m: [16, 14, 12, 11, 9, 7, 9, 11], d: [2, 2, 2, 2, 2, 2, 2, 2], b: 60 }, // D:Ray新曲 // 他的7號;原誤判為 My Heart Will Go On,實為卡農
+  { id: 'new-gran-vals', t: 'Gran Vals Gran Vals(經典手機鈴聲,塔雷加)', m: [19, 17, 9, 11, 16, 14, 5, 7, 14, 12, 4, 7], d: [0.5, 0.5, 1, 1, 0.5, 0.5, 1, 1, 0.5, 0.5, 1, 1], b: 108 }, // D:Ray新曲 // 他的35號
+  { id: 'new-moonlight', t: 'Moonlight Sonata 1st mov. 月光奏鳴曲第一樂章(貝多芬)', m: [4, -3, 0, 4, -3, 0, 4, -3, 0], d: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5], b: 90 }, // D:Ray新曲(待補唱名) // 他的8號;11-28 Ray:最低音移高八度(低mi→mi),同唱名不同八度算對
+  { id: 'new-mozart-40', t: 'Mozart Symphony No. 40 第40號交響曲(莫札特)', m: [17, 16, 16, 17, 16, 16, 17, 16, 16], d: [0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5, 1], b: 120 }, // D:Ray新曲(待補唱名) // 他的9號
+  { id: 'new-old-macdonald', t: 'Old MacDonald Had a Farm 王老先生有塊地', m: [12, 12, 12, 7, 9, 9, 7, 16, 16, 14, 14, 12], d: [1.5, 0.5, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1], b: 108 }, // D:Ray新曲 // 他的30號
+  { id: 'swanee-river', t: 'Swanee River 故鄉的親人(福斯特)', m: [4, 2, 0, 4, 2, 0, 12, 9, 12], d: [2, 0.5, 0.5, 0.5, 0.5, 1, 1, 0.5, 1], b: 108 }, // D:Ray新曲 // 他的34號;11-28 Ray 確認=Swanee River,C 大調首調
+  { id: 'au-clair-de-la-lune', t: 'Au Clair de la Lune 在月光下(法國民謠)', m: [0, 0, 0, 2, 4, 2, 0, 4, 2, 2, 0], d: [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2], b: 90 }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'deck-the-halls', t: 'Deck the Halls 裝飾聖誕廳', m: [7, 5, 4, 2, 0, 2, 4, 0], d: [1, 0.5, 0.5, 1, 0.5, 0.5, 1, 1], b: 90 }, // E:建議保留版(未回檔) // everyinstrument(F 調轉 do)
+  { id: 'dixie', t: 'Dixie 迪克西', m: [0, 2, 4, 5, 7, 9, 7, 5], d: [1, 1, 1, 1, 1, 1, 1, 2], b: 90 }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'god-save-the-king', t: 'God Save the King 天佑國王', m: [0, 0, 2, 0, 11, 12], d: [1, 1, 1, 1, 1, 2], b: 90 }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'grand-old-duke', t: 'The Grand Old Duke of York 約克大公', m: [0, 2, 4, 7, 4, 2, 0], d: [1, 1, 1, 1, 1, 1, 2], b: 90 }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'la-donna-e-mobile', t: 'La donna è mobile 女人善變(威爾第)', m: [11, 12, 14, 16, 17, 16, 14, 12], d: [1, 0.5, 0.5, 1, 1, 1, 1, 2], b: 90 }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'la-marseillaise', t: 'La Marseillaise 馬賽曲', m: [7, 0, 0, 2, 4, 5, 4, 2], d: [0.5, 1, 1, 1, 1, 1, 1, 2], b: 90 }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'londons-burning', t: 'Londons Burning 倫敦大火', m: [7, 9, 11, 12], d: [1, 1, 1, 2], b: 90 }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'pop-goes-the-weasel', t: 'Pop! Goes the Weasel 砰!黃鼠狼跑了', m: [7, 12, 14, 12, 9, 7], d: [1, 1, 1, 1, 1, 2], b: 90 }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'red-river-valley', t: 'Red River Valley 紅河谷', m: [7, 12, 16, 16, 14, 12, 14, 12, 9, 12], d: [1, 1, 1, 1, 1, 1, 1, 1, 1, 2], b: 90 }, // E:建議保留版(未回檔) // everyinstrument 音高相符
+  { id: 'taps', t: 'Taps 熄燈號', m: [7, 7, 12], d: [1, 1, 3], b: 90 }, // E:建議保留版(未回檔) // 音高待 Ray 核;僅 3 音
+  { id: 'the-first-noel', t: 'The First Noel 第一個聖誕', m: [4, 2, 0, 2, 4, 5, 7], d: [1, 0.5, 0.5, 0.5, 0.5, 0.5, 2], b: 90 }, // E:建議保留版(未回檔) // everyinstrument 音高相符
+  { id: 'three-blind-mice', t: 'Three Blind Mice 三隻盲老鼠', m: [4, 2, 0, 4, 2, 0], d: [1, 1, 2, 1, 1, 2], b: 90 }, // E:建議保留版(未回檔) // 音高待 Ray 核
 ]
 let SONG_TITLES = [];   // 本輪 8 段的曲名(與 ITEMS 平行)
 let SONG_DURS = [];     // 本輪 8 段的節奏(拍長,與 ITEMS 平行)
+let SONG_BPMS = [];     // 本輪 8 段各自的 BPM(11-28 照 Ray 原檔速度記號;無記號 90)
 let level = 1;
 let ITEMS = LEVELS[1];
 
@@ -304,7 +305,7 @@ function playItem(withChord) {
   if (withChord) {
     cur = playCadence(t0);
   }
-  const BEAT = 0.6667; // t90:一拍 0.6667 秒(Ray 11-27 選定;11-26 舊基準 0.42=143BPM 太快)
+  const BEAT = 60 / ((level === 5 && SONG_BPMS[itemIdx]) || 90); // 每段各自 BPM(11-28 照 Ray 原檔;預設 90=0.6667s/拍)
   const durs = (level === 5 && SONG_DURS[itemIdx]) ? SONG_DURS[itemIdx] : null;
   mel.forEach((f, i) => {
     const dur = durs ? Math.max(durs[i] * BEAT, 0.12) : (i === mel.length - 1 ? 1 : 0.55);
@@ -584,7 +585,7 @@ async function playSungAnswer() {
     const c = audioCtx();
     const offs = level >= 4 ? ITEMS[itemIdx] : ITEMS[itemIdx].map(d => DEG2OFF[d]);
     const durs = (level === 5 && SONG_DURS[itemIdx]) ? SONG_DURS[itemIdx] : null;
-    const BEAT = 0.6667; // t90(與題目旋律同基準)
+    const BEAT = 60 / ((level === 5 && SONG_BPMS[itemIdx]) || 90); // 與題目旋律同基準(每段各自 BPM)
     let t = c.currentTime + 0.15;
     offs.forEach((off, i) => {
       const g = OFF2GRID[off];
@@ -661,6 +662,7 @@ function resetItems(resetKey) {
     ITEMS = round.map(f => f.m);
     SONG_TITLES = round.map(f => f.t);
     SONG_DURS = round.map(f => f.d);
+    SONG_BPMS = round.map(f => f.b || 90);
   }
   if (resetKey) { keyIdx = 0; markKeys(); }
   $('sumcard').hidden = true;

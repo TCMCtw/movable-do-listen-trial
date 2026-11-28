@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>世界名曲試聽清單(草稿)</title>
+<style>
+  body{font-family:-apple-system,"PingFang TC",sans-serif;max-width:640px;margin:0 auto;padding:16px;background:#fdfcf9;color:#333}
+  h1{font-size:1.2rem}
+  .cap{color:#888;font-size:.85rem}
+  .keys{margin:8px 0}
+  .btn{border:1px solid #ccc;border-radius:8px;background:#fff;padding:6px 10px;margin:2px;cursor:pointer;font-size:.9rem}
+  .btn.sel{background:#E8A33D;border-color:#E8A33D;color:#fff}
+  .song{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee;padding:8px 0;gap:6px}
+  .song .nm{flex:1}
+  .song .syl{display:block;color:#999;font-size:.75rem}
+  .play{color:#0e7c7b;border-color:#0e7c7b;white-space:nowrap}
+</style>
+</head>
+<body>
+<h1>世界名曲試聽清單(草稿,待審)</h1>
+<div class="cap">共 62 首,依歌名排列。選調與聲部後,每首可聽「旋律」(電子音,與題目相同)或「人聲答案」(切片人聲,與頁面答案相同)。速度一律 90 BPM。</div>
+<div class="cap">調:
+  <span id="keys"></span>
+  聲部:<button type="button" class="btn sel" id="vof">女聲</button><button type="button" class="btn" id="vom">男聲</button>
+</div>
+<div id="list"></div>
+<script>
+const FREQ = {
+  G2: 98.000, Ab2: 103.826, A2: 110.000, Bb2: 116.541, B2: 123.471,
+  C3: 130.813, Cs3: 138.591, D3: 146.832, Eb3: 155.563, E3: 164.814,
+  F3: 174.614, Fs3: 184.997, G3: 196.0,
+  Ab3: 207.652, A3: 220, Bb3: 233.082, B3: 246.942,
+  C4: 261.626, Cs4: 277.183, D4: 293.665, Eb4: 311.127, E4: 329.628,
+  F4: 349.228, Fs4: 369.994, G4: 391.996, Gs4: 415.305, Ab4: 415.305, A4: 440, Bb4: 466.164, B4: 493.883,
+  C5: 523.251, Cs5: 554.365, D5: 587.330, Eb5: 622.254, E5: 659.255, F5: 698.456, Fs5: 739.990, Gb5: 739.990,
+  G5: 783.991, Ab5: 830.609, A5: 880, Bb5: 932.328,
+  B5: 987.767, C6: 1046.502, Cs6: 1108.731, D6: 1174.659, Eb6: 1244.508, E6: 1318.510, F6: 1396.913, Fs6: 1479.978
+};
+const NAMES = ['C', 'Cs', 'D', 'Eb', 'E', 'F', 'Fs', 'G', 'Ab', 'A', 'Bb', 'B'];
+const KEY_LABELS = ['C', 'D♭', 'D', 'E♭', 'E', 'F', 'G♭', 'G', 'A♭', 'A', 'B♭', 'B'];
+const ANSWER_KEYS = ['C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B'];
+const VOICES = { female: { label: '女聲', oct: 4 }, male: { label: '男聲', oct: 3 } };
+function noteAt(i, oct) { return NAMES[((i % 12) + 12) % 12] + (oct + Math.floor(i / 12)); }
+const OFF2GRID = { '-5': 0, '-3': 1, '-1': 2, 0: 3, 2: 4, 4: 5, 5: 6, 7: 7, 9: 8, 11: 9, 12: 10, 14: 11, 16: 12, 17: 13, 19: 14 };
+const OFF2SYL = { '-5': ['sol', -1], '-3': ['la', -1], '-1': ['ti', -1], 0: ['do', 0], 2: ['re', 0], 4: ['mi', 0], 5: ['fa', 0], 7: ['sol', 0], 9: ['la', 0], 11: ['ti', 0], 12: ['do', 1], 14: ['re', 1], 16: ['mi', 1], 17: ['fa', 1], 19: ['sol', 1] };
+const GRID_ONSETS = { female: {"C":[2.546,5.301,7.934,10.639,13.224,15.925,18.601,21.215,23.963,26.602,29.303,31.886,34.597,37.249,39.884],"Db":[2.54,5.301,7.928,10.64,13.3,15.921,18.591,21.215,23.957,26.603,29.297,31.991,34.666,37.202,39.739],"D":[2.442,5.186,7.895,10.624,13.204,15.918,18.563,21.111,23.849,26.551,29.31,31.829,34.597,37.247,39.779],"Eb":[2.54,5.189,7.894,10.642,13.204,15.918,18.58,21.111,23.849,26.54,29.304,31.955,34.59,37.257,39.78],"E":[2.442,5.186,7.897,10.641,13.206,15.917,18.565,21.111,23.858,26.566,29.309,31.856,34.591,37.247,39.78],"F":[2.541,5.304,7.928,10.639,13.225,15.923,18.591,21.215,23.958,26.603,29.297,31.883,34.596,37.245,39.884],"Gb":[2.442,5.189,7.901,10.629,13.207,15.918,18.567,21.111,23.853,26.563,29.293,31.866,34.586,37.239,39.78],"G":[2.442,5.194,7.907,10.626,13.203,15.918,18.576,21.111,23.848,26.562,29.286,31.865,34.587,37.229,39.779],"Ab":[2.442,5.192,7.898,10.625,13.204,15.917,18.576,21.111,23.849,26.546,29.286,31.813,34.586,37.232,39.779],"A":[2.54,5.301,7.929,10.641,13.224,15.918,18.579,21.111,23.85,26.551,29.292,31.871,34.586,37.232,39.78],"Bb":[2.442,5.193,7.907,10.636,13.204,15.918,18.565,21.111,23.85,26.536,29.284,31.867,34.589,37.241,39.78],"B":[2.442,5.188,7.897,10.635,13.204,15.916,18.568,21.111,23.848,26.542,29.295,31.868,34.59,37.232,39.779]}, male: {"C":[2.491,5.256,7.958,10.647,13.221,15.909,18.661,21.159,23.914,26.616,29.302,31.887,34.574,37.324,39.828],"Db":[2.541,5.305,7.98,10.649,13.228,15.918,18.629,21.215,23.959,26.614,29.308,31.883,34.597,37.309,39.884],"D":[2.502,5.255,7.953,10.647,13.219,15.912,18.653,21.162,23.912,26.615,29.306,31.886,34.576,37.297,39.827],"Eb":[2.493,5.255,7.956,10.638,13.219,15.91,18.64,21.165,23.912,26.617,29.303,31.891,34.577,37.327,39.826],"E":[2.497,5.254,7.95,10.653,13.219,15.912,18.664,21.16,23.912,26.615,29.318,31.882,34.577,37.303,39.831],"F":[2.499,5.256,7.957,10.64,13.222,15.916,18.667,21.169,23.915,26.635,29.302,31.884,34.58,37.325,39.833],"Gb":[2.499,5.255,7.97,10.655,13.284,15.912,18.669,21.16,23.915,26.616,29.305,31.884,34.576,37.326,39.829],"G":[2.499,5.253,7.964,10.644,13.221,15.909,18.667,21.167,23.915,26.622,29.299,31.883,34.576,37.293,39.83],"Ab":[2.505,5.254,7.958,10.655,13.213,15.912,18.627,21.16,23.917,26.617,29.305,31.881,34.574,37.285,39.828],"A":[2.493,5.257,7.97,10.653,13.239,15.913,18.67,21.16,23.916,26.617,29.304,31.879,34.575,37.291,39.829],"Bb":[2.524,5.263,8.02,10.679,13.347,15.917,18.678,21.181,23.919,26.671,29.335,31.915,34.58,37.348,39.853],"B":[2.499,5.256,7.96,10.651,13.215,15.912,18.636,21.16,23.914,26.615,29.299,31.89,34.573,37.3,39.836]} };
+const SONG_FRAGS = [
+  { id: 'brahms-lullaby', t: 'Brahms Lullaby 布拉姆斯搖籃曲', m: [4, 4, 7, 4, 4, 7], d: [0.5, 0.5, 2, 0.5, 0.5, 2] }, // A:Ray單檔唱名版
+  { id: 'frere-jacques', t: 'Frère Jacques 兩隻老虎', m: [0, 2, 4, 0, 0, 2, 4, 0], d: [1, 1, 1, 1, 1, 1, 1, 1] }, // A:Ray單檔唱名版
+  { id: 'greensleeves', t: 'Greensleeves 綠袖子', m: [9, 12, 14, 16, 17, 16, 14, 11, 7], d: [0.5, 1, 0.5, 1, 0.25, 0.25, 1, 0.5, 1] }, // A:Ray單檔唱名版
+  { id: 'happy-birthday', t: 'Happy Birthday 生日快樂歌', m: [7, 7, 9, 7, 12, 11], d: [0.75, 0.25, 1, 1, 1, 3] }, // A:Ray單檔唱名版
+  { id: 'jingle-bells', t: 'Jingle Bells 鈴兒響叮噹', m: [4, 4, 4, 4, 4, 4, 4, 7, 0, 2, 4], d: [1, 1, 2, 1, 1, 2, 1, 1, 1.5, 0.5, 1] }, // A:Ray單檔唱名版
+  { id: 'london-bridge', t: 'London Bridge 倫敦鐵橋垮下來', m: [7, 9, 7, 5, 4, 5, 7, 2, 4, 5], d: [1.5, 0.5, 1, 1, 1, 1, 2, 1, 1, 2] }, // A:Ray單檔唱名版
+  { id: 'minuet-in-g', t: 'Minuet in G G 大調小步舞曲(巴哈)', m: [19, 12, 14, 16, 17, 19, 12, 12], d: [1, 0.5, 0.5, 0.5, 0.5, 1, 1, 1] }, // A:Ray單檔唱名版
+  { id: 'ode-to-joy', t: 'Ode to Joy 快樂頌(貝多芬)', m: [4, 4, 5, 7, 7, 5, 4, 2, 0, 0, 2, 4], d: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1] }, // A:Ray單檔唱名版
+  { id: 'sakura', t: 'Sakura 櫻花(日本民謠)', m: [9, 9, 11, 9, 9, 11, 9, 11, 12, 11, 9, 11, 9, 5], d: [1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 0.5, 0.5, 1] }, // A:Ray單檔唱名版
+  { id: 'silent-night', t: 'Silent Night 平安夜', m: [7, 9, 7, 4, 7, 9, 7, 4], d: [1.5, 0.5, 1, 3, 1.5, 0.5, 1, 3] }, // A:Ray單檔唱名版
+  { id: 'twinkle-twinkle', t: 'Twinkle Twinkle Little Star 小星星', m: [0, 0, 7, 7, 9, 9, 7], d: [1, 1, 1, 1, 1, 1, 2] }, // A:Ray單檔唱名版
+  { id: 'auld-lang-syne', t: 'Auld Lang Syne 友誼地久天長', m: [-5, 0, 0, 0, 4, 2, 0, 2], d: [1, 1.5, 0.5, 1, 1, 1.5, 0.5, 1] }, // B:Ray zip修改版
+  { id: 'aura-lee', t: 'Aura Lee 奧拉·李', m: [-5, 0, -1, 0, 2, -3, 2], d: [1, 1, 0.5, 1.5, 1.5, 0.5, 2] }, // B:Ray zip修改版
+  { id: 'blue-danube', t: 'The Blue Danube 藍色多瑙河', m: [0, 0, 4, 7, 7, 7, 7, 4, 4], d: [1, 1, 1, 1, 2, 1, 2, 1, 2] }, // B:Ray zip修改版
+  { id: 'bridal-chorus', t: 'Bridal Chorus (Wagner) 結婚進行曲(華格納)', m: [7, 12, 12, 12, 12, 7, 14, 11, 12], d: [1, 1.5, 0.5, 1, 1, 1, 1.5, 0.5, 1] }, // B:Ray zip修改版
+  { id: 'danny-boy', t: 'Danny Boy (Londonderry Air) 丹尼男孩', m: [-1, 0, 2, 4, 4, 2, 4, 9, 7, 4, 2, 0, -3], d: [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1] }, // B:Ray zip修改版
+  { id: 'eine-kleine', t: 'Eine kleine Nachtmusik 弦樂小夜曲(莫札特)', m: [12, 7, 12, 7, 12, 7, 12, 16, 19], d: [0.75, 0.25, 0.75, 0.25, 0.25, 0.25, 0.25, 0.25, 1] }, // B:Ray zip修改版
+  { id: 'good-king-wenceslas', t: 'Good King Wenceslas 溫塞斯拉斯國王', m: [12, 12, 12, 14, 12, 12, 7], d: [1, 1, 1, 1, 1, 1, 2] }, // B:Ray zip修改版
+  { id: 'hark-the-herald', t: 'Hark! The Herald Angels Sing 聽啊天使唱高聲', m: [0, 5, 5, 4, 5, 9, 9, 5], d: [1, 1, 1.5, 0.5, 1, 1, 1, 1] }, // B:Ray zip修改版
+  { id: 'joy-to-the-world', t: 'Joy to the World 普世歡騰', m: [12, 11, 9, 7, 5, 4, 2, 0], d: [1, 0.75, 0.5, 1.5, 0.25, 1, 1, 1.5] }, // B:Ray zip修改版
+  { id: 'loch-lomond', t: 'Loch Lomond 洛蒙德湖', m: [-5, 0, 0, 2, 4, 2, 0, 2, 2, 0, -3], d: [1, 1, 0.75, 0.25, 1, 0.75, 0.25, 1, 0.75, 0.25, 1] }, // B:Ray zip修改版
+  { id: 'mo-li-hua', t: 'Mo Li Hua (Jasmine Flower) 茉莉花', m: [4, 4, 7, 9, 12, 12, 9, 7, 7, 9, 7], d: [1, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1, 0.5, 0.5, 2] }, // B:Ray zip修改版
+  { id: 'o-christmas-tree', t: 'O Christmas Tree 聖誕樹', m: [7, 12, 12, 12, 12, 14, 16, 16, 16], d: [1, 1, 1, 1, 2, 1, 1, 1, 1] }, // B:Ray zip修改版
+  { id: 'o-come-all-ye-faithful', t: 'O Come All Ye Faithful 齊來虔誠崇拜', m: [12, 12, 7, 12, 14, 7], d: [1, 2, 1, 1, 2, 2] }, // B:Ray zip修改版
+  { id: 'o-sole-mio', t: 'O Sole Mio 我的太陽', m: [12, 12, 11, 7, 7, 7], d: [1, 1.5, 0.5, 1, 1, 2] }, // B:Ray zip修改版
+  { id: 'oh-susanna', t: 'Oh! Susanna 噢蘇珊娜', m: [0, 2, 4, 7, 7, 7, 9, 7, 4, 0], d: [0.5, 0.5, 1, 1, 1, 0.5, 0.5, 1, 1, 1.5] }, // B:Ray zip修改版
+  { id: 'row-row-row-your-boat', t: 'Row Row Row Your Boat 划船', m: [0, 0, 0, 2, 4, 4, 2, 4, 5, 7], d: [1, 1, 0.75, 0.25, 1, 0.75, 0.25, 0.75, 0.25, 2] }, // B:Ray zip修改版
+  { id: 'wangchunfeng', t: 'Bang Chun Hong 望春風', m: [-5, -5, -3, 0, 2, 0, 2, 4], d: [1.5, 0.5, 1, 1, 1, 0.5, 0.5, 2] }, // B:Ray zip回傳未改
+  { id: 'we-wish-you', t: 'We Wish You a Merry Christmas 祝你聖誕快樂', m: [7, 12, 12, 14, 12, 11, 9, 9], d: [1, 1, 0.75, 0.25, 0.75, 0.25, 1, 1] }, // B:Ray zip修改版
+  { id: 'when-the-saints', t: 'When the Saints Go Marching In 聖者行進', m: [0, 4, 5, 7, 7, 0, 4, 5, 7, 7], d: [1, 1, 1, 1, 3, 1, 1, 1, 1, 2] }, // B:Ray zip修改版
+  { id: 'yankee-doodle', t: 'Yankee Doodle 洋基歌', m: [7, 12, 12, 14, 16, 12, 16, 14], d: [0.5, 1, 1, 1, 1, 1, 1, 2] }, // B:Ray zip回傳未改
+  { id: 'zarathustra', t: 'Also sprach Zarathustra 查拉圖斯特拉如是說(2001 太空漫遊)', m: [0, 7, 12], d: [1.5, 1.5, 4] }, // B:Ray zip回傳未改
+  { id: 'new-beethoven-5th', t: 'beethoven-5th 貝多芬第五號交響曲(命運)', m: [4, 4, 4, 0, 2, 2, 2, -1], d: [0.5, 0.5, 0.5, 2, 0.5, 0.5, 0.5, 2] }, // D:Ray新曲(待補唱名)
+  { id: 'new-gkw-or-other-6-8', t: 'gkw-or-other-6-8 待確認(6/8)', m: [0, 0, 0, 2, 4, 4, 2, 4, 5, 7], d: [1.5, 1.5, 1, 0.5, 1.5, 1, 0.5, 1, 0.5, 3] }, // D:Ray新曲(待補唱名)
+  { id: 'new-moonlight-arpeggio', t: 'moonlight-arpeggio 月光奏鳴曲(貝多芬)', m: [0, 4, 7, 12, 16, 7, 12, 16], d: [0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25, 0.25] }, // D:Ray新曲(待補唱名)
+  { id: 'new-my-heart-will-go-on', t: 'my-heart-will-go-on My Heart Will Go On(版權疑慮)', m: [16, 14, 12, 11, 9, 7, 9, 11], d: [2, 2, 2, 2, 2, 2, 2, 2] }, // D:Ray新曲(待補唱名)
+  { id: 'new-swan-lake', t: 'swan-lake 天鵝湖主題(柴可夫斯基)', m: [-3, -1, 0, 2, 4, 0, 4, 2, -1, 2], d: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1, 0.5, 0.5, 1] }, // D:Ray新曲(待補唱名)
+  { id: 'new-unidentified-A-min', t: 'unidentified-A-min 待確認(A小調)', m: [16, 11, 12, 14, 12, 11, 9, 9, 12, 16], d: [1, 0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5, 1] }, // D:Ray新曲(待補唱名)
+  { id: 'new-unidentified-Bb-min', t: 'unidentified-Bb-min 待確認(Bb小調)', m: [17, 16, 16, 17, 16, 16, 17, 16, 16], d: [0.5, 0.5, 1, 0.5, 0.5, 1, 0.5, 0.5, 1] }, // D:Ray新曲(待補唱名)
+  { id: 'new-unidentified-C-min', t: 'unidentified-C-min 待確認(C小調)', m: [7, 4, 4, 5, 2, 2, 0, 2, 4, 5, 7, 7, 7], d: [1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 1, 1, 2] }, // D:Ray新曲(待補唱名)
+  { id: 'new-unidentified-E-min-arp', t: 'unidentified-E-min-arp 待確認(E小調分解)', m: [-8, -3, 0, -8, -3, 0, -8, -3, 0], d: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5] }, // D:Ray新曲(待補唱名)
+  { id: 'new-unidentified-F-3-4', t: 'unidentified-F-3-4 待確認(F 3/4)', m: [-5, -3, -5, -3, 0, 2, 0, 2, 4, 2], d: [1.5, 0.5, 0.5, 0.5, 1.5, 0.5, 0.5, 0.5, 1, 1] }, // D:Ray新曲(待補唱名)
+  { id: 'new-what-a-wonderful-world', t: 'what-a-wonderful-world What a Wonderful World(版權疑慮)', m: [7, 12, 16, 12, 16, 14, 12, 9, 7], d: [1, 2, 0.5, 0.5, 2, 1, 2, 1, 3] }, // D:Ray新曲(待補唱名)
+  { id: 'amazing-grace', t: 'Amazing Grace 奇異恩典', m: [7, 12, 16, 12, 16], d: [1, 1, 1, 1, 3] }, // E:建議保留版(未回檔) // everyinstrument 音高相符;節奏草案
+  { id: 'au-clair-de-la-lune', t: 'Au Clair de la Lune 在月光下(法國民謠)', m: [0, 0, 0, 2, 4, 2, 0, 4, 2, 2, 0], d: [1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'deck-the-halls', t: 'Deck the Halls 裝飾聖誕廳', m: [7, 5, 4, 2, 0, 2, 4, 0], d: [1, 0.5, 0.5, 1, 0.5, 0.5, 1, 1] }, // E:建議保留版(未回檔) // everyinstrument(F 調轉 do)
+  { id: 'dixie', t: 'Dixie 迪克西', m: [0, 2, 4, 5, 7, 9, 7, 5], d: [1, 1, 1, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'god-save-the-king', t: 'God Save the King 天佑國王', m: [0, 0, 2, 0, 11, 12], d: [1, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'grand-old-duke', t: 'The Grand Old Duke of York 約克大公', m: [0, 2, 4, 7, 4, 2, 0], d: [1, 1, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'korobeiniki', t: 'Korobeiniki 貨郎(俄羅斯,Tetris 主題)', m: [9, 11, 12, 14, 16, 12, 9], d: [1, 1, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'la-donna-e-mobile', t: 'La donna è mobile 女人善變(威爾第)', m: [11, 12, 14, 16, 17, 16, 14, 12], d: [1, 0.5, 0.5, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'la-marseillaise', t: 'La Marseillaise 馬賽曲', m: [7, 0, 0, 2, 4, 5, 4, 2], d: [0.5, 1, 1, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'lightly-row', t: 'Lightly Row 輕輕划', m: [4, 7, 7, 9, 7, 5], d: [1, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'londons-burning', t: 'Londons Burning 倫敦大火', m: [7, 9, 11, 12], d: [1, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'mary-had-a-little-lamb', t: 'Mary Had a Little Lamb 瑪莉有隻小綿羊', m: [4, 2, 0, 2, 4, 4, 4], d: [1, 1, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // everyinstrument 音高相符
+  { id: 'mountain-king', t: 'In the Hall of the Mountain King 山魔王的宮殿(葛利格)', m: [9, 11, 12, 14, 16, 17, 16, 14], d: [1, 1, 1, 1, 1, 1, 1, 1] }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'pop-goes-the-weasel', t: 'Pop! Goes the Weasel 砰!黃鼠狼跑了', m: [7, 12, 14, 12, 9, 7], d: [1, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
+  { id: 'red-river-valley', t: 'Red River Valley 紅河谷', m: [7, 12, 16, 16, 14, 12, 14, 12, 9, 12], d: [1, 1, 1, 1, 1, 1, 1, 1, 1, 2] }, // E:建議保留版(未回檔) // everyinstrument 音高相符
+  { id: 'taps', t: 'Taps 熄燈號', m: [7, 7, 12], d: [1, 1, 3] }, // E:建議保留版(未回檔) // 音高待 Ray 核;僅 3 音
+  { id: 'the-first-noel', t: 'The First Noel 第一個聖誕', m: [4, 2, 0, 2, 4, 5, 7], d: [1, 0.5, 0.5, 0.5, 0.5, 0.5, 2] }, // E:建議保留版(未回檔) // everyinstrument 音高相符
+  { id: 'this-old-man', t: 'This Old Man 這位老先生', m: [7, 4, 7, 7, 4, 7], d: [1, 1, 2, 1, 1, 2] }, // E:建議保留版(未回檔) // everyinstrument 音高相符
+  { id: 'three-blind-mice', t: 'Three Blind Mice 三隻盲老鼠', m: [4, 2, 0, 4, 2, 0], d: [1, 1, 2, 1, 1, 2] }, // E:建議保留版(未回檔) // 音高待 Ray 核
+]
+function answerFile(v, keyId) { return 'audio/' + (v === 'male' ? 'answer-bass-' : 'answer-') + keyId + '.m4a'; }
+function fetchBuf(url) {
+  const c = audioCtx();
+  return fetch(url)
+    .then(r => { if (!r.ok) throw new Error('http ' + r.status); return r.arrayBuffer(); })
+    .then(ab => c.decodeAudioData(ab));
+}
+let keyIdx = 0, voice = 'female';
+const $ = id => document.getElementById(id);
+let ac = null;
+function audioCtx() {
+  if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)();
+  if (ac.state === 'suspended') void ac.resume();
+  return ac;
+}
+function tone(freq, t, dur, amp) {
+  const c = audioCtx();
+  const g = c.createGain();
+  g.gain.setValueAtTime(1e-4, t);
+  g.gain.exponentialRampToValueAtTime(amp, t + 0.015);
+  g.gain.setTargetAtTime(amp * 0.75, t + 0.015, Math.max(dur / 3, 0.03));
+  g.gain.setValueAtTime(1e-4, t + dur);
+  const o = c.createOscillator();
+  o.type = 'sine'; o.frequency.value = freq;
+  o.connect(g); g.connect(c.destination);
+  o.start(t); o.stop(t + dur + 0.1);
+}
+let sungSources = [];
+function stopSung() { sungSources.forEach(s => { try { s.stop(); } catch (e) {} }); sungSources = []; }
+const ansBufs = {};
+function loadAnswer(keyId, v) {
+  const cacheKey = v + ':' + keyId;
+  if (ansBufs[cacheKey]) return ansBufs[cacheKey];
+  let p = fetchBuf(answerFile(v, keyId)).then(buf => ({ buf: buf, used: v }));
+  if (v === 'male') p = p.catch(() => fetchBuf(answerFile('female', keyId)).then(buf => ({ buf: buf, used: 'female' })));
+  ansBufs[cacheKey] = p.catch(err => { delete ansBufs[cacheKey]; throw err; });
+  return ansBufs[cacheKey];
+}
+const BEAT = 0.6667; // 90 BPM
+function playMelody(f) {
+  stopSung();
+  const c = audioCtx();
+  let cur = c.currentTime + 0.1;
+  f.m.forEach((off, i) => {
+    const nn = noteAt(keyIdx + off, VOICES[voice].oct);
+    const dur = Math.max(f.d[i] * BEAT, 0.12);
+    tone(FREQ[nn], cur, Math.max(dur - 0.04, 0.1), 0.55);
+    cur += dur;
+  });
+}
+async function playAnswer(f, btn) {
+  const keyId = ANSWER_KEYS[keyIdx];
+  btn.disabled = true; btn.textContent = '載入中…';
+  try {
+    const ans = await loadAnswer(keyId, voice);
+    const onsets = (GRID_ONSETS[ans.used] || {})[keyId];
+    if (!onsets) throw new Error('no timing');
+    const buf = ans.buf;
+    stopSung();
+    const c = audioCtx();
+    let t = c.currentTime + 0.15;
+    f.m.forEach((off, i) => {
+      const g = OFF2GRID[off];
+      if (g === undefined) return;
+      const dur = Math.max(f.d[i] * BEAT, 0.12);
+      const start = Math.max(onsets[g] - 0.1, 0);
+      const nextOnset = (g + 1 < onsets.length) ? onsets[g + 1] - 0.15 : buf.duration;
+      const len = Math.min(dur + 0.02, nextOnset - start, buf.duration - start);
+      const src = c.createBufferSource(); src.buffer = buf;
+      const gn = c.createGain();
+      gn.gain.setValueAtTime(0, t);
+      gn.gain.linearRampToValueAtTime(0.9, t + 0.02);
+      gn.gain.setValueAtTime(0.9, t + Math.max(len - 0.05, 0.02));
+      gn.gain.linearRampToValueAtTime(0, t + len);
+      src.connect(gn); gn.connect(c.destination);
+      src.start(t, start, len + 0.001);
+      sungSources.push(src);
+      t += dur;
+    });
+  } catch (e) { btn.textContent = '播放失敗'; }
+  finally { btn.disabled = false; if (btn.textContent === '載入中…') btn.textContent = '人聲答案'; }
+}
+function sylText(f) {
+  return f.m.map(off => { const v = OFF2SYL[off]; if (!v) return '?'; return v[1] > 0 ? v[0] + '.'.repeat(v[1]) : v[1] < 0 ? ','.repeat(-v[1]) + v[0] : v[0]; }).join(' ');
+}
+KEY_LABELS.forEach((label, i) => {
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'btn' + (i === keyIdx ? ' sel' : ''); b.textContent = label;
+  b.onclick = () => { keyIdx = i; document.querySelectorAll('#keys .btn').forEach((x, j) => x.classList.toggle('sel', j === i)); };
+  $('keys').appendChild(b);
+});
+$('vof').onclick = () => { voice = 'female'; $('vof').classList.add('sel'); $('vom').classList.remove('sel'); };
+$('vom').onclick = () => { voice = 'male'; $('vom').classList.add('sel'); $('vof').classList.remove('sel'); };
+const sorted = [...SONG_FRAGS].sort((a, b) => a.t.localeCompare(b.t, 'zh-Hant'));
+sorted.forEach(f => {
+  const row = document.createElement('div'); row.className = 'song';
+  const nm = document.createElement('div'); nm.className = 'nm';
+  nm.innerHTML = '<strong>' + f.t + '</strong><span class="syl">' + sylText(f) + '</span>';
+  const b1 = document.createElement('button'); b1.type = 'button'; b1.className = 'btn play'; b1.textContent = '旋律';
+  b1.onclick = () => playMelody(f);
+  const b2 = document.createElement('button'); b2.type = 'button'; b2.className = 'btn play'; b2.textContent = '人聲答案';
+  b2.onclick = () => playAnswer(f, b2);
+  row.appendChild(nm); row.appendChild(b1); row.appendChild(b2);
+  $('list').appendChild(row);
+});
+</script>
+</body>
+</html>
